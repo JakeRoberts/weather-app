@@ -15,13 +15,13 @@ function getWeather (searchValue) {
     fetch(queryLink)
     .then(function (response) {
         return response.json()
-    }) .then(function(data) {
+    }).then(function(data) {
         console.log(data);
         let name = data.name;
         let lat = data.coord.lat;
         let lon = data.coord.lon;
         getWeatherData (name, lat, lon);
-    })
+    });
 }
 //imperial converts celcius to fahrenheit
 function getWeatherData (name, lat, lon) {
@@ -30,7 +30,7 @@ function getWeatherData (name, lat, lon) {
     fetch(queryLink)
     .then(function (response) {
         return response.json()
-    }) .then(function(data) {
+    }).then(function(data) {
         console.log(data);
         displayCurrentWeather (name, data);
         displayforecast (data.daily); 
@@ -39,7 +39,7 @@ function getWeatherData (name, lat, lon) {
 
 function displayCurrentWeather (name, data) {
     // takes date time from data and converts to javascript object. then converts to a string
-   var date = new Date(data.dt).toLocaleDateString();
+   var date = (new Date(data.current.dt*1000)).toLocaleDateString();
    var temp = data.current.temp;
    var humidity = data.current.humidity;
    var windspeed = data.current.wind_speed;
@@ -69,6 +69,29 @@ function displayCurrentWeather (name, data) {
     <p>uvindex: <span class= "${uviIntensity}">${uvi}</span></p>
    `;
    document.querySelector("#today").innerHTML = html;
+}
+
+function displayforecast (data) {
+    console.log(data);
+    var html = "";
+    for (let index = 0; index < 5; index++) {
+        const d = data[index];
+        const date = (new Date(d.dt*1000)).toLocaleDateString();
+        const icon = d.weather[0].icon;
+        const temp = d.temp.day;
+        const humidity = d.humidity;
+        const windspeed = d.wind_speed;
+        html += `
+        <div>
+        <h3>${date}</h3>
+        <img src="https://openweathermap.org/img/wn/${icon}@2x.png">
+        <p>temp: ${temp}&deg;F</p>
+        <p>humidity: ${humidity}%</p>
+        <p>windspeed: ${windspeed}mph</p>
+        </div>
+        `;
+    }
+    document.querySelector("#forecast").innerHTML = html;
 }
 
 searchBtn.addEventListener("click", searchValue);

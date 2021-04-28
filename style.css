@@ -17,3 +17,12 @@
 .extreme {
     background-color: purple;
 }
+
+#forecast > div {
+    display: inline-block;
+    margin: 5px;
+    vertical-align: top;
+    background-color: rgb(201, 4, 142);
+    border-radius: 10px;
+    padding: 10px;
+}
